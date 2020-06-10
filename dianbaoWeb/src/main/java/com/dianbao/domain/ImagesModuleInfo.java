@@ -3,17 +3,21 @@ package com.dianbao.domain;
 
 
 
+/**图片所属模块管理
+ * @author YangYongLin
+ *
+ */
 public class ImagesModuleInfo{
 
 	
 	private java.lang.Integer id;
-	/***/
+	/** 模块编号 */
 	private java.lang.String moduleCode;
-	/***/
+	/** 模块名称 */
 	private java.lang.String moduleName;
-	/***/
+	/** 模块上级编号 */
 	private java.lang.String moduleParentCode;
-	/***/
+	/** 模块上级名称 */
 	private java.lang.String moduleParentName;
 	//columns END
 

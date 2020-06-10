@@ -2,29 +2,33 @@ package com.dianbao.domain;
 
 
 
+/** 负责官网图片管理
+ * @author YangYongLin
+ *
+ */
 public class ImagesInfo{
 	
 	//可以直接使用: @Length(max=50,message="用户名长度不能大于50")显示错误消息
 	//columns START
 	
 	private java.lang.Long id;
-	/***/
+	/** 图片名称 */
 	private java.lang.String imagesName;
-	/***/
+	/** 图片地址 */
 	private java.lang.String imagesAdress;
-	/***/
+	/** 图片链接 */
 	private java.lang.String imagesUrl;
-	/***/
+	/** 图片所属模块编号 */
 	private java.lang.String imagesModuleCode;
-	/***/
+	/** 图片所属模块名称 */
 	private java.lang.String imagesModule;
-	/***/
+	/** 图片状态 */
 	private java.lang.String imagesStatus;
-	
+	/** 上传时间 */
 	private java.util.Date createTime;
-	/***/
+	/** 备注 */
 	private java.lang.String note;
-	
+	/** 图片排序 */
 	private java.lang.Integer imagesSort;
 	//columns END
 
