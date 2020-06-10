@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.dianbao.dao.ImagesInfoDao">
+
+	<resultMap id="BaseResultMap" type="com.dianbao.domain.ImagesInfo">
+        <result property="id" column="id"/>
+        <result property="imagesName" column="images_name"/>
+        <result property="imagesAdress" column="images_adress"/>
+        <result property="imagesUrl" column="images_url"/>
+        <result property="imagesModuleCode" column="images_module_code"/>
+        <result property="imagesModule" column="images_module"/>
+        <result property="imagesStatus" column="images_status"/>
+        <result property="createTime" column="create_time"/>
+        <result property="note" column="note"/>
+        <result property="imagesSort" column="images_sort"/>
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="ImagesInfo.columns">
+	    <![CDATA[
+		id,images_name,images_adress,images_url,images_module_code,images_module,images_status,create_time,note,images_sort
+	    ]]>
+	</sql>
+
+	<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+	<insert id="ImagesInfo.insert" useGeneratedKeys="true" keyProperty="id">
+    <![CDATA[
+        INSERT INTO images_info (
+        	images_name ,
+        	images_adress ,
+        	images_url ,
+        	images_module_code ,
+        	images_module ,
+        	images_status ,
+        	create_time ,
+        	note ,
+        	images_sort 
+        ) VALUES (
+        	#{imagesName} ,
+        	#{imagesAdress} ,
+        	#{imagesUrl} ,
+        	#{imagesModuleCode} ,
+        	#{imagesModule} ,
+        	#{imagesStatus} ,
+        	#{createTime} ,
+        	#{note} ,
+        	#{imagesSort} 
+        )
+    ]]>
+		<!--	
+			oracle: order="BEFORE" SELECT sequenceName.nextval AS ID FROM DUAL 
+			DB2: order="BEFORE"" values nextval for sequenceName
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="userId">
+			SELECT sequenceName.nextval AS ID FROM DUAL 
+        </selectKey>
+		-->
+	</insert>
+    
+	<update id="ImagesInfo.update" >
+    <![CDATA[
+        UPDATE images_info SET
+	        images_name = #{imagesName} ,
+	        images_adress = #{imagesAdress} ,
+	        images_url = #{imagesUrl} ,
+	        images_module_code = #{imagesModuleCode} ,
+	        images_module = #{imagesModule} ,
+	        images_status = #{imagesStatus} ,
+	        create_time = #{createTime} ,
+	        note = #{note} ,
+	        images_sort = #{imagesSort} 
+        WHERE 
+	        id = #{id} 
+    ]]>
+	</update>
+
+    <delete id="ImagesInfo.delete">
+    <![CDATA[
+        DELETE FROM images_info WHERE
+        id = #{id} 
+    ]]>
+    </delete>
+    
+    <select id="ImagesInfo.getById" resultMap="BaseResultMap">
+		SELECT <include refid="ImagesInfo.columns" />
+	    <![CDATA[
+		    FROM images_info 
+	        WHERE 
+		        id = #{id} 
+	    ]]>
+	</select>
+	
+	<sql id="ImagesInfo.findPage.where">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用rapid中的Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+	       <if test="@Ognl@isNotEmpty(id)">
+				AND id = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(imagesName)">
+				AND images_name = #{imagesName}
+			</if>
+	       <if test="@Ognl@isNotEmpty(imagesAdress)">
+				AND images_adress = #{imagesAdress}
+			</if>
+	       <if test="@Ognl@isNotEmpty(imagesUrl)">
+				AND images_url = #{imagesUrl}
+			</if>
+	       <if test="@Ognl@isNotEmpty(imagesModuleCode)">
+				AND images_module_code = #{imagesModuleCode}
+			</if>
+	       <if test="@Ognl@isNotEmpty(imagesModule)">
+				AND images_module = #{imagesModule}
+			</if>
+	       <if test="@Ognl@isNotEmpty(imagesStatus)">
+				AND images_status = #{imagesStatus}
+			</if>
+	       <if test="@Ognl@isNotEmpty(createTimeBegin)">
+				AND create_time >= #{createTimeBegin}
+		   </if>
+		   <if test="@Ognl@isNotEmpty(createTimeEnd)">
+				AND create_time &lt;= #{createTimeEnd}
+		   </if>
+	       <if test="@Ognl@isNotEmpty(note)">
+				AND note = #{note}
+			</if>
+	       <if test="@Ognl@isNotEmpty(imagesSort)">
+				AND images_sort = #{imagesSort}
+			</if>
+		</where>
+	</sql>
+		
+    <select id="ImagesInfo.findPage.count" resultType="long">
+        SELECT count(*) FROM images_info 
+		<include refid="ImagesInfo.findPage.where"/>    
+    </select>
+    
+    <!--
+    	分页查询已经使用Dialect进行分页,也可以不使用Dialect直接编写分页
+    	因为分页查询将传 offset,pageSize,lastRows 三个参数,不同的数据库可以根于此三个参数属性应用不同的分页实现
+    -->
+    <select id="ImagesInfo.findPage" resultMap="BaseResultMap">
+    	SELECT <include refid="ImagesInfo.columns" />
+	    FROM images_info 
+		<include refid="ImagesInfo.findPage.where"/>
+		
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+
+	
+</mapper>
+

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.dianbao.dao.ImagesModuleInfoDao">
+
+	<resultMap id="BaseResultMap" type="com.dianbao.domain.ImagesModuleInfo">
+        <result property="id" column="id"/>
+        <result property="moduleCode" column="module_code"/>
+        <result property="moduleName" column="module_name"/>
+        <result property="moduleParentCode" column="module_parent_code"/>
+        <result property="moduleParentName" column="module_parent_name"/>
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="ImagesModuleInfo.columns">
+	    <![CDATA[
+		id,module_code,module_name,module_parent_code,module_parent_name
+	    ]]>
+	</sql>
+
+	<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+	<insert id="ImagesModuleInfo.insert" useGeneratedKeys="true" keyProperty="id">
+    <![CDATA[
+        INSERT INTO images_module_info (
+        	module_code ,
+        	module_name ,
+        	module_parent_code ,
+        	module_parent_name 
+        ) VALUES (
+        	#{moduleCode} ,
+        	#{moduleName} ,
+        	#{moduleParentCode} ,
+        	#{moduleParentName} 
+        )
+    ]]>
+		<!--	
+			oracle: order="BEFORE" SELECT sequenceName.nextval AS ID FROM DUAL 
+			DB2: order="BEFORE"" values nextval for sequenceName
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="userId">
+			SELECT sequenceName.nextval AS ID FROM DUAL 
+        </selectKey>
+		-->
+	</insert>
+    
+	<update id="ImagesModuleInfo.update" >
+    <![CDATA[
+        UPDATE images_module_info SET
+	        module_code = #{moduleCode} ,
+	        module_name = #{moduleName} ,
+	        module_parent_code = #{moduleParentCode} ,
+	        module_parent_name = #{moduleParentName} 
+        WHERE 
+	        id = #{id} 
+    ]]>
+	</update>
+
+    <delete id="ImagesModuleInfo.delete">
+    <![CDATA[
+        DELETE FROM images_module_info WHERE
+        id = #{id} 
+    ]]>
+    </delete>
+    
+    <select id="ImagesModuleInfo.getById" resultMap="BaseResultMap">
+		SELECT <include refid="ImagesModuleInfo.columns" />
+	    <![CDATA[
+		    FROM images_module_info 
+	        WHERE 
+		        id = #{id} 
+	    ]]>
+	</select>
+	
+	<sql id="ImagesModuleInfo.findPage.where">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用rapid中的Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+	       <if test="@Ognl@isNotEmpty(id)">
+				AND id = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(moduleCode)">
+				AND module_code = #{moduleCode}
+			</if>
+	       <if test="@Ognl@isNotEmpty(moduleName)">
+				AND module_name = #{moduleName}
+			</if>
+	       <if test="@Ognl@isNotEmpty(moduleParentCode)">
+				AND module_parent_code = #{moduleParentCode}
+			</if>
+	       <if test="@Ognl@isNotEmpty(moduleParentName)">
+				AND module_parent_name = #{moduleParentName}
+			</if>
+		</where>
+	</sql>
+		
+    <select id="ImagesModuleInfo.findPage.count" resultType="long">
+        SELECT count(*) FROM images_module_info 
+		<include refid="ImagesModuleInfo.findPage.where"/>    
+    </select>
+    
+    <!--
+    	分页查询已经使用Dialect进行分页,也可以不使用Dialect直接编写分页
+    	因为分页查询将传 offset,pageSize,lastRows 三个参数,不同的数据库可以根于此三个参数属性应用不同的分页实现
+    -->
+    <select id="ImagesModuleInfo.findPage" resultMap="BaseResultMap">
+    	SELECT <include refid="ImagesModuleInfo.columns" />
+	    FROM images_module_info 
+		<include refid="ImagesModuleInfo.findPage.where"/>
+		
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+
+	
+</mapper>
+
