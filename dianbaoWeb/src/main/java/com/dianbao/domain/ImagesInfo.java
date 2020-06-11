@@ -1,14 +1,13 @@
 package com.dianbao.domain;
 
-
+import com.dianbao.util.BaseEntity;
 
 /** 负责官网图片管理
  * @author YangYongLin
  *
  */
-public class ImagesInfo{
+public class ImagesInfo extends BaseEntity {
 	
-	//可以直接使用: @Length(max=50,message="用户名长度不能大于50")显示错误消息
 	//columns START
 	
 	private java.lang.Long id;
@@ -21,7 +20,7 @@ public class ImagesInfo{
 	/** 图片所属模块编号 */
 	private java.lang.String imagesModuleCode;
 	/** 图片所属模块名称 */
-	private java.lang.String imagesModule;
+	private java.lang.String imagesModuleName;
 	/** 图片状态 */
 	private java.lang.String imagesStatus;
 	/** 上传时间 */
@@ -31,6 +30,15 @@ public class ImagesInfo{
 	/** 图片排序 */
 	private java.lang.Integer imagesSort;
 	//columns END
+
+    /** 查询开始时间 */
+    private String beginDate;
+
+    /** 查询结束时间 */
+    private String endDate;
+    
+    /** 虚拟字段：创建时间 */
+    private String createTimeZ;
 
 
 	public void setId(java.lang.Long value) {
@@ -68,12 +76,12 @@ public class ImagesInfo{
 	public java.lang.String getImagesModuleCode() {
 		return this.imagesModuleCode;
 	}
-	public void setImagesModule(java.lang.String value) {
-		this.imagesModule = value;
+	public void setImagesModuleName(java.lang.String value) {
+		this.imagesModuleName = value;
 	}
 	
-	public java.lang.String getImagesModule() {
-		return this.imagesModule;
+	public java.lang.String getImagesModuleName() {
+		return this.imagesModuleName;
 	}
 	public void setImagesStatus(java.lang.String value) {
 		this.imagesStatus = value;
@@ -104,6 +112,30 @@ public class ImagesInfo{
 	
 	public java.lang.Integer getImagesSort() {
 		return this.imagesSort;
+	}
+
+	public String getBeginDate() {
+		return beginDate;
+	}
+
+	public void setBeginDate(String beginDate) {
+		this.beginDate = beginDate;
+	}
+
+	public String getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(String endDate) {
+		this.endDate = endDate;
+	}
+
+	public String getCreateTimeZ() {
+		return createTimeZ;
+	}
+
+	public void setCreateTimeZ(String createTimeZ) {
+		this.createTimeZ = createTimeZ;
 	}
 
 

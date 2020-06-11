@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
-"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 
 <!-- 不使用namespace的话sql搜索定位会比较方便 -->
@@ -13,17 +12,35 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         <result property="imagesAdress" column="images_adress"/>
         <result property="imagesUrl" column="images_url"/>
         <result property="imagesModuleCode" column="images_module_code"/>
-        <result property="imagesModule" column="images_module"/>
+        <result property="imagesModuleName" column="images_module_name"/>
         <result property="imagesStatus" column="images_status"/>
         <result property="createTime" column="create_time"/>
         <result property="note" column="note"/>
         <result property="imagesSort" column="images_sort"/>
 	</resultMap>
+  <sql id="Base_Column_List">
+    id, images_name, images_adress, images_url, images_module_code, images_module_name, images_status, 
+    create_time, note, images_sort
+  </sql>
+	
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from images_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+	
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        DELETE FROM images_info WHERE
+        id = #{id,jdbcType=INTEGER}
+    </delete>
+	
 	
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="ImagesInfo.columns">
 	    <![CDATA[
-		id,images_name,images_adress,images_url,images_module_code,images_module,images_status,create_time,note,images_sort
+		id,images_name,images_adress,images_url,images_module_code,images_module_name,images_status,create_time,note,images_sort
 	    ]]>
 	</sql>
 
@@ -35,7 +52,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         	images_adress ,
         	images_url ,
         	images_module_code ,
-        	images_module ,
+        	images_module_name ,
         	images_status ,
         	create_time ,
         	note ,
@@ -45,7 +62,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         	#{imagesAdress} ,
         	#{imagesUrl} ,
         	#{imagesModuleCode} ,
-        	#{imagesModule} ,
+        	#{imagesModuleName} ,
         	#{imagesStatus} ,
         	#{createTime} ,
         	#{note} ,
@@ -61,31 +78,40 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		-->
 	</insert>
     
-	<update id="ImagesInfo.update" >
-    <![CDATA[
-        UPDATE images_info SET
-	        images_name = #{imagesName} ,
-	        images_adress = #{imagesAdress} ,
-	        images_url = #{imagesUrl} ,
-	        images_module_code = #{imagesModuleCode} ,
-	        images_module = #{imagesModule} ,
-	        images_status = #{imagesStatus} ,
-	        create_time = #{createTime} ,
-	        note = #{note} ,
-	        images_sort = #{imagesSort} 
+	<update id="updateByPrimaryKeySelective" >
+        UPDATE images_info  
+        <set>
+	      <if test="imagesName != null">
+	        images_name = #{imagesName,jdbcType=VARCHAR},
+	      </if>
+	      <if test="imagesAdress != null">
+	        images_adress = #{imagesAdress,jdbcType=VARCHAR},
+	      </if>
+	      <if test="imagesUrl != null">
+	        images_url = #{imagesUrl,jdbcType=VARCHAR},
+	      </if>
+	      <if test="imagesModuleCode != null">
+	        images_module_code = #{imagesModuleCode,jdbcType=VARCHAR},
+	      </if>
+	      <if test="images_module_name != null">
+	        images_module_name = #{images_module_name,jdbcType=VARCHAR},
+	      </if>
+	      <if test="imagesStatus != null">
+	        images_status = #{imagesStatus,jdbcType=VARCHAR},
+	      </if>
+	      <if test="note != null">
+	        note = #{note,jdbcType=VARCHAR},
+	      </if>
+	      <if test="imagesSort != null">
+	        images_sort = #{imagesSort,jdbcType=VARCHAR},
+	      </if>
+        </set>
+      
         WHERE 
 	        id = #{id} 
-    ]]>
 	</update>
-
-    <delete id="ImagesInfo.delete">
-    <![CDATA[
-        DELETE FROM images_info WHERE
-        id = #{id} 
-    ]]>
-    </delete>
     
-    <select id="ImagesInfo.getById" resultMap="BaseResultMap">
+    <select id="getById" resultMap="BaseResultMap">
 		SELECT <include refid="ImagesInfo.columns" />
 	    <![CDATA[
 		    FROM images_info 
@@ -94,64 +120,114 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	    ]]>
 	</select>
 	
-	<sql id="ImagesInfo.findPage.where">
-		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用rapid中的Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
-		<where>	      				
-	       <if test="@Ognl@isNotEmpty(id)">
-				AND id = #{id}
-			</if>
-	       <if test="@Ognl@isNotEmpty(imagesName)">
-				AND images_name = #{imagesName}
-			</if>
-	       <if test="@Ognl@isNotEmpty(imagesAdress)">
-				AND images_adress = #{imagesAdress}
-			</if>
-	       <if test="@Ognl@isNotEmpty(imagesUrl)">
-				AND images_url = #{imagesUrl}
-			</if>
-	       <if test="@Ognl@isNotEmpty(imagesModuleCode)">
-				AND images_module_code = #{imagesModuleCode}
-			</if>
-	       <if test="@Ognl@isNotEmpty(imagesModule)">
-				AND images_module = #{imagesModule}
-			</if>
-	       <if test="@Ognl@isNotEmpty(imagesStatus)">
-				AND images_status = #{imagesStatus}
-			</if>
-	       <if test="@Ognl@isNotEmpty(createTimeBegin)">
-				AND create_time >= #{createTimeBegin}
-		   </if>
-		   <if test="@Ognl@isNotEmpty(createTimeEnd)">
-				AND create_time &lt;= #{createTimeEnd}
-		   </if>
-	       <if test="@Ognl@isNotEmpty(note)">
-				AND note = #{note}
-			</if>
-	       <if test="@Ognl@isNotEmpty(imagesSort)">
-				AND images_sort = #{imagesSort}
-			</if>
-		</where>
-	</sql>
-		
-    <select id="ImagesInfo.findPage.count" resultType="long">
-        SELECT count(*) FROM images_info 
-		<include refid="ImagesInfo.findPage.where"/>    
-    </select>
-    
-    <!--
-    	分页查询已经使用Dialect进行分页,也可以不使用Dialect直接编写分页
-    	因为分页查询将传 offset,pageSize,lastRows 三个参数,不同的数据库可以根于此三个参数属性应用不同的分页实现
-    -->
-    <select id="ImagesInfo.findPage" resultMap="BaseResultMap">
-    	SELECT <include refid="ImagesInfo.columns" />
-	    FROM images_info 
-		<include refid="ImagesInfo.findPage.where"/>
-		
-		<if test="@Ognl@isNotEmpty(sortColumns)">
-			ORDER BY ${sortColumns}
-		</if>
-    </select>
-
+	
+  <insert id="insertSelective" parameterType="com.dianbao.domain.ImagesInfo" >
+    insert into images_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="imagesName != null">
+        images_name
+      </if>
+      <if test="imagesAdress != null">
+        images_adress
+      </if>
+      <if test="imagesUrl != null">
+        images_url
+      </if>
+      <if test="imagesModuleCode != null">
+        images_module_code
+      </if>
+      <if test="imagesModuleName != null">
+        images_module_name
+      </if>
+      <if test="imagesStatus != null">
+        images_status
+      </if>
+      <if test="createTime != null">
+        create_time
+      </if>
+      <if test="note != null">
+        note
+      </if>
+      <if test="imagesSort != null">
+        images_sort
+      </if>
+      
+      )
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="imagesName != null">
+        #imagesName#
+      </if>
+      <if test="imagesAdress != null">
+        #imagesAdress#
+      </if>
+      <if test="imagesUrl != null">
+        #imagesUrl#
+      </if>
+      <if test="imagesModuleCode != null">
+        #imagesModuleCode#
+      </if>
+      <if test="imagesModuleName != null">
+        #imagesModuleName#
+      </if>
+      <if test="imagesStatus != null">
+        #imagesStatus#
+      </if>
+      <if test="createTime != null">
+        #createTime#
+      </if>
+      <if test="note != null">
+        #note#
+      </if>
+      <if test="imagesSort != null">
+        #imagesSort#
+      </if>
+     )
+    </trim>
+  </insert>
+	
+	<select id="selectImagesByPage" resultType="com.dianbao.domain.ImagesInfo" parameterType="com.dianbao.domain.ImagesInfo">
+	select images.id, images.images_name, images.images_adress, images.images_url, images.images_module_code,  
+    images.images_module_name, images.images_status,DATE_FORMAT(images.create_time,'%Y-%m-%d %H:%i:%s') createTimeZ, images.note, images.images_sort from images_info images 
+    where 1=1 <include refid="list_Filters_images" />
+    ORDER BY images.images_module_code asc,images.create_time asc 
+	<if test='startRow != null'>
+		limit ${startRow}, #{pageSize}
+	</if>
+	</select>
+	
+	
+	<select id="countImagesByPage" resultType="int" parameterType="com.dianbao.domain.ImagesInfo">
+	select count(*) from images_info images where 1 = 1 <include refid="list_Filters_images" />
+	</select>
+	
+  <sql id="list_Filters_images">
+    <if test='imagesName != null and imagesName !="" '>
+      and instr(images.images_name, #{title}) > 0
+    </if>
+    <if test='note != null and note !="" '>
+      and instr(images.note, #{note}) > 0
+    </if>
+    <if test='imagesModuleCode != null and imagesModuleCode !="" '>
+      and images.images_module_code = #{imagesModuleCode, jdbcType=VARCHAR}
+    </if>
+    <if test='imagesModuleName != null and imagesModuleName !="" '>
+      and instr(images.images_module_name, #{imagesModuleName}) > 0
+    </if>
+    <if test='imagesStatus != null and imagesStatus !="" '>
+      and images.images_status = #{imagesStatus, jdbcType=VARCHAR}
+    </if>
+    <if test='imagesSort >0 '>
+      and images.images_sort = #{imagesSort}
+    </if>
+    <if test='beginDate != null and beginDate != ""'>
+        and str_to_date( images.create_time, '%Y-%m-%d %H:%i:%s') <![CDATA[>=]]> str_to_date(#{beginDate}, '%Y-%m-%d %H:%i:%s') 
+    </if>
+    <if test='endDate != null and endDate != ""'>
+        and str_to_date( images.create_time, '%Y-%m-%d %H:%i:%s') <![CDATA[<=]]> str_to_date(#{endDate}, '%Y-%m-%d %H:%i:%s') 
+    </if>
+  </sql>
+	
 	
 </mapper>
 
