@@ -1,13 +1,12 @@
 package com.dianbao.domain;
 
-
-
+import com.dianbao.util.BaseEntity;
 
 /**图片所属模块管理
  * @author YangYongLin
  *
  */
-public class ImagesModuleInfo{
+public class ImagesModuleInfo extends BaseEntity {
 
 	
 	private java.lang.Integer id;

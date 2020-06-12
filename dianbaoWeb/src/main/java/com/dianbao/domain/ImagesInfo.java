@@ -1,12 +1,12 @@
 package com.dianbao.domain;
 
-
+import com.dianbao.util.BaseEntity;
 
 /** 负责官网图片管理
  * @author YangYongLin
  *
  */
-public class ImagesInfo{
+public class ImagesInfo extends BaseEntity {
 	
 	//可以直接使用: @Length(max=50,message="用户名长度不能大于50")显示错误消息
 	//columns START
