@@ -4,13 +4,13 @@
 <mapper namespace="com.dianbao.dao.UserDao">
 <!--设置domain类和数据库中表的字段一一对应，注意数据库字段和domain类中的字段名称不致，此处一定要！-->
 	<resultMap id="BaseResultMap" type="com.dianbao.domain.User">
-		<id column="USER_ID" property="userId" jdbcType="INTEGER" />
+		<result column="USER_ID" property="userId" jdbcType="INTEGER" />
 		<result column="USER_NAME" property="userName" jdbcType="CHAR" />
 		<result column="USER_PASSWORD" property="userPassword" jdbcType="CHAR" />
 		<result column="USER_EMAIL" property="userEmail" jdbcType="CHAR" />
 	</resultMap>
 	<!-- 查询单条记录 -->
-	<select id="selectUserById" parameterType="int" resultMap="BaseResultMap">
-		SELECT * FROM t_user WHERE USER_ID = #{userId}
+	<select id="selectUserById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		SELECT * FROM t_user WHERE USER_ID = #{userId,jdbcType=INTEGER}
 	</select>
 </mapper>

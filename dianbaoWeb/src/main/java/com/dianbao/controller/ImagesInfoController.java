@@ -1,13 +1,17 @@
 package com.dianbao.controller;
 
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -18,6 +22,7 @@ import com.dianbao.service.ImagesInfoService;
 import com.dianbao.util.CommErrors;
 import com.dianbao.util.CommException;
 import com.dianbao.util.CommonUtils;
+import com.dianbao.util.Page;
 import com.dianbao.util.StringUtils;
 
 /**
@@ -36,12 +41,12 @@ public class ImagesInfoController {
 	@RequestMapping("/uploadImg")
 	@ResponseBody
 	public Map<String, Object> upload(@RequestParam("imagesName") String imagesName,
-			@RequestParam("imagesModuleCode") String imagesModuleCode,@RequestParam("imagesSort") int imagesSort,
+			@RequestParam("imagesModuleCode") String imagesModuleCode, @RequestParam("imagesSort") int imagesSort,
 			@RequestParam("imagesModuleName") String imagesModuleName, MultipartFile file, HttpServletRequest request)
 			throws Exception {
 
-		if(file == null){
-            throw new CommException(CommErrors.ADMIN_PARAMS_NULL);
+		if (file == null) {
+			throw new CommException(CommErrors.ADMIN_PARAMS_NULL);
 		}
 		ImagesInfo param = new ImagesInfo();
 		param.setImagesName(imagesName);
@@ -52,7 +57,7 @@ public class ImagesInfoController {
 		checkParam(param);
 		param = imagesInfoService.copyImages(param, file);
 		param.setCreateTime(new Date());
-		
+
 		imagesInfoService.insertSelective(param);
 
 		return CommonUtils.result(1, "上传成功");
@@ -60,40 +65,136 @@ public class ImagesInfoController {
 
 	private void checkParam(ImagesInfo param) {
 		if (param == null) {
-            throw new CommException(CommErrors.ADMIN_PARAMS_NULL);
-        }
+			throw new CommException(CommErrors.ADMIN_PARAMS_NULL);
+		}
 
-        if(StringUtils.isBlank(param.getImagesModuleCode())){
-            throw new CommException("文件所属模块编码不能为空!");
-        }
+		if (StringUtils.isBlank(param.getImagesModuleCode())) {
+			throw new CommException("文件所属模块编码不能为空!");
+		}
 
-        if(StringUtils.isBlank(param.getImagesModuleName())){
-            throw new CommException("文件所属模块名称不能为空!");
-        }
+		if (StringUtils.isBlank(param.getImagesModuleName())) {
+			throw new CommException("文件所属模块名称不能为空!");
+		}
 	}
-	
-	
-	/*
-	 * 
-	 * @RequestMapping(value = "/{id}")
-	 * 
-	 * @ResponseBody public BoroughInfo info(@PathVariable("id") String id){
-	 * BoroughInfo vo = boroughInfoService.selectByPrimaryKey(id);
-	 * vo.setBoroughChannels(boroughInfoService.findByChannels(vo)); // 佣金方案列表
-	 * vo.setCommissionList(boroughInfoService.selectCommissionsByBoroughInfoId(id))
-	 * ; return vo; }
-	 */
-	/*
-	
-	*//**
-		 * 删除一个楼盘资料
-		 **//*
-			 * @RequestMapping(value = "/attach/delete")
-			 * 
-			 * @ResponseBody public Map<String, Object> deleteAttach(@RequestBody
-			 * BoroughInfoAttach param){
-			 * boroughInfoService.deleteBoroughInfoAttachById(param.getId()); return
-			 * CommonUtils.result(1, "删除成功"); }
-			 */
 
+	
+	  
+	  @RequestMapping(value = "/update")
+	  @ResponseBody
+	  public Map<String, Object> saveInfo(@RequestBody ImagesInfo param){
+		  if (StringUtils.isBlank(param)) {
+			  throw new CommException(CommErrors.ADMIN_PARAMS_NULL);
+		  }
+		  
+		  if(StringUtils.isBlank(param.getId())) {
+			  throw new CommException(CommErrors.ADMIN_PARAMS_NULL);
+		  }
+
+		  try {
+			ImagesInfo vo = imagesInfoService.selectByPrimaryKey(param.getId().intValue());
+			if(vo!= null) {
+				imagesInfoService.updateByPrimaryKeySelective(vo);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		  
+		  
+			return CommonUtils.result(1, "修改成功");
+	 }
+
+
+	
+	  
+	  @RequestMapping(value = "/find/{id}")
+	  @ResponseBody
+	  public ImagesInfo findInfo(@PathVariable("id") String id){
+		  if (StringUtils.isBlank(id)) {
+			  throw new CommException(CommErrors.ADMIN_PARAMS_NULL);
+		  }
+		  
+		  if(StringUtils.isNumeric1(id)) {
+			  throw new CommException(CommErrors.MON_ERROR);
+		  }
+		  ImagesInfo vo = null;
+		try {
+			int sid = Integer.parseInt(id);
+			vo = imagesInfoService.selectByPrimaryKey(sid);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		  }
+			  return vo;
+	 }
+
+	  
+		 
+	  	 /**
+		 * 删除文件
+		 **/
+		  @RequestMapping(value = "/delete/{id}")
+		  @ResponseBody
+		  public Map<String, Object> deleteAttach(@PathVariable("id") String id){
+			  if (StringUtils.isBlank(id)) {
+				  throw new CommException(CommErrors.ADMIN_PARAMS_NULL);
+			  }
+			  
+			  if(StringUtils.isNumeric1(id)) {
+				  throw new CommException(CommErrors.MON_ERROR);
+			  }
+
+			  try {
+				  int sid = Integer.parseInt(id);
+				  imagesInfoService.deleteByPrimaryKey(sid);
+			  } catch (SQLException e) {
+				  // TODO Auto-generated catch block
+				  e.printStackTrace();
+			  }
+			  return  CommonUtils.result(1, "删除成功");
+		  }
+			 
+			  
+
+		    /**
+		     * @Title: 文件分页查询
+		     * @author YYL 2020年6月12日 下午12:19:45
+		     * @param param
+		     * @return
+		     */
+		    @RequestMapping(value = "/selectByPage")
+		    @ResponseBody
+		    public Map<String, Object> selectByPage(@RequestBody ImagesInfo param){
+		    	Map<String,Object> returnMap = new HashMap<>();
+		    	Page page = imagesInfoService.selectByPage(param);
+		    	
+		    	returnMap.put("imagesName", param.getImagesName());
+		    	returnMap.put("imagesModuleCode", param.getImagesModuleCode());
+		    	returnMap.put("imagesModuleName", param.getImagesModuleName());
+		    	returnMap.put("beginDate", param.getBeginDate());
+		    	returnMap.put("endDate", param.getEndDate());
+		    	returnMap.put("page", page);
+				return returnMap;
+		    }
+
+
+		    /**
+		     * @Title: 文件数据查询
+		     * @author YYL 2020年6月12日 下午12:19:45
+		     * @param param
+		     * @return
+		     */
+		    @RequestMapping(value = "/selectByList")
+		    @ResponseBody
+		    public Map<String, Object> selectByList(@RequestBody ImagesInfo param){
+		    	Map<String,Object> returnMap = new HashMap<>();
+		    	List<ImagesInfo> list = imagesInfoService.selectByList(param);
+		    	returnMap.put("imagesModuleCode", param.getImagesModuleCode());
+		    	returnMap.put("list", list);
+				return returnMap;
+		    }
+		    
+		    
+		    
+	  
 }

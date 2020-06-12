@@ -54,6 +54,10 @@ public class ImagesInfoServiceImpl implements ImagesInfoService {
         
 		return page;
 	}
+	
+	
+	
+	
 
 	@Override
 	public void deleteByPrimaryKey(java.lang.Integer id) throws SQLException {
@@ -75,6 +79,12 @@ public class ImagesInfoServiceImpl implements ImagesInfoService {
 		param.setImagesAdress(fileAddress);
 		param.setImagesUrl("/images/"+moduleCode + filename);
 		return param;
+	}
+
+	@Override
+	public List<ImagesInfo> selectByList(ImagesInfo param) {
+		// TODO Auto-generated method stub
+		return imagesInfoDao.selectImagesByPage(param);
 	}
 	
 	

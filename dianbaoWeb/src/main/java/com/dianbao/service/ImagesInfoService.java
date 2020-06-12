@@ -1,6 +1,7 @@
 package com.dianbao.service;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,6 +20,7 @@ public interface ImagesInfoService {
     
     Page selectByPage(ImagesInfo param);
     
+    List<ImagesInfo> selectByList(ImagesInfo param);
     
     /**
      * @Title: 拷贝文件至指定目录

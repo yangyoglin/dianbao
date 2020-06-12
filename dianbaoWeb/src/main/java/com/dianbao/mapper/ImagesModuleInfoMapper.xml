@@ -88,8 +88,42 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
+  
+  
+	
+	<select id="selectByPage" resultType="com.dianbao.domain.ImagesModuleInfo" parameterType="com.dianbao.domain.ImagesModuleInfo">
+	select 
+    <include refid="Base_Column_List" />
+    from images_module_info 
+    where 1=1 <include refid="list_Filters" />
+    ORDER BY module_code asc 
+	<if test='startRow != null'>
+		limit ${startRow}, #{pageSize}
+	</if>
+	</select>
+	
+	<select id="countByPage" resultType="int" parameterType="com.dianbao.domain.ImagesModuleInfo">
+	select count(*) from images_module_info where 1 = 1 <include refid="list_Filters" />
+	</select>
 	
 	
+  <sql id="list_Filters">
+    <if test='moduleCode != null and moduleCode !="" '>
+      and module_code = #{moduleCode, jdbcType=VARCHAR}
+    </if>
+    
+    <if test='moduleName != null and moduleName !="" '>
+      and instr(module_name, #{moduleName}) > 0
+    </if>
+    
+    <if test='moduleParentCode != null and moduleParentCode !="" '>
+      and module_parent_code = #{moduleParentCode, jdbcType=VARCHAR}
+    </if>
+    
+    <if test='moduleParentName != null and moduleParentName !="" '>
+      and instr(module_parent_name, #{moduleParentName}) > 0
+    </if>
+  </sql>
 
 
 	

@@ -22,6 +22,33 @@
     id, images_name, images_adress, images_url, images_module_code, images_module_name, images_status, 
     create_time, note, images_sort
   </sql>
+  
+  <sql id="list_Filters_images">
+    <if test='imagesName != null and imagesName !="" '>
+      and instr(images.images_name, #{imagesName}) > 0
+    </if>
+    <if test='note != null and note !="" '>
+      and instr(images.note, #{note}) > 0
+    </if>
+    <if test='imagesModuleCode != null and imagesModuleCode !="" '>
+      and images.images_module_code = #{imagesModuleCode, jdbcType=VARCHAR}
+    </if>
+    <if test='imagesModuleName != null and imagesModuleName !="" '>
+      and instr(images.images_module_name, #{imagesModuleName}) > 0
+    </if>
+    <if test='imagesStatus != null and imagesStatus !="" '>
+      and images.images_status = #{imagesStatus, jdbcType=VARCHAR}
+    </if>
+    <if test='imagesSort >0 '>
+      and images.images_sort = #{imagesSort}
+    </if>
+    <if test='beginDate != null and beginDate != ""'>
+        and str_to_date( images.create_time, '%Y-%m-%d %H:%i:%s') <![CDATA[>=]]> str_to_date(#{beginDate}, '%Y-%m-%d %H:%i:%s') 
+    </if>
+    <if test='endDate != null and endDate != ""'>
+        and str_to_date( images.create_time, '%Y-%m-%d %H:%i:%s') <![CDATA[<=]]> str_to_date(#{endDate}, '%Y-%m-%d %H:%i:%s') 
+    </if>
+  </sql>
 	
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -36,47 +63,6 @@
         id = #{id,jdbcType=INTEGER}
     </delete>
 	
-	
-	<!-- 用于select查询公用抽取的列 -->
-	<sql id="ImagesInfo.columns">
-	    <![CDATA[
-		id,images_name,images_adress,images_url,images_module_code,images_module_name,images_status,create_time,note,images_sort
-	    ]]>
-	</sql>
-
-	<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
-	<insert id="ImagesInfo.insert" useGeneratedKeys="true" keyProperty="id">
-    <![CDATA[
-        INSERT INTO images_info (
-        	images_name ,
-        	images_adress ,
-        	images_url ,
-        	images_module_code ,
-        	images_module_name ,
-        	images_status ,
-        	create_time ,
-        	note ,
-        	images_sort 
-        ) VALUES (
-        	#{imagesName} ,
-        	#{imagesAdress} ,
-        	#{imagesUrl} ,
-        	#{imagesModuleCode} ,
-        	#{imagesModuleName} ,
-        	#{imagesStatus} ,
-        	#{createTime} ,
-        	#{note} ,
-        	#{imagesSort} 
-        )
-    ]]>
-		<!--	
-			oracle: order="BEFORE" SELECT sequenceName.nextval AS ID FROM DUAL 
-			DB2: order="BEFORE"" values nextval for sequenceName
-		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="userId">
-			SELECT sequenceName.nextval AS ID FROM DUAL 
-        </selectKey>
-		-->
-	</insert>
     
 	<update id="updateByPrimaryKeySelective" >
         UPDATE images_info  
@@ -110,15 +96,6 @@
         WHERE 
 	        id = #{id} 
 	</update>
-    
-    <select id="getById" resultMap="BaseResultMap">
-		SELECT <include refid="ImagesInfo.columns" />
-	    <![CDATA[
-		    FROM images_info 
-	        WHERE 
-		        id = #{id} 
-	    ]]>
-	</select>
 	
 	
   <insert id="insertSelective" parameterType="com.dianbao.domain.ImagesInfo" >
@@ -201,32 +178,6 @@
 	select count(*) from images_info images where 1 = 1 <include refid="list_Filters_images" />
 	</select>
 	
-  <sql id="list_Filters_images">
-    <if test='imagesName != null and imagesName !="" '>
-      and instr(images.images_name, #{title}) > 0
-    </if>
-    <if test='note != null and note !="" '>
-      and instr(images.note, #{note}) > 0
-    </if>
-    <if test='imagesModuleCode != null and imagesModuleCode !="" '>
-      and images.images_module_code = #{imagesModuleCode, jdbcType=VARCHAR}
-    </if>
-    <if test='imagesModuleName != null and imagesModuleName !="" '>
-      and instr(images.images_module_name, #{imagesModuleName}) > 0
-    </if>
-    <if test='imagesStatus != null and imagesStatus !="" '>
-      and images.images_status = #{imagesStatus, jdbcType=VARCHAR}
-    </if>
-    <if test='imagesSort >0 '>
-      and images.images_sort = #{imagesSort}
-    </if>
-    <if test='beginDate != null and beginDate != ""'>
-        and str_to_date( images.create_time, '%Y-%m-%d %H:%i:%s') <![CDATA[>=]]> str_to_date(#{beginDate}, '%Y-%m-%d %H:%i:%s') 
-    </if>
-    <if test='endDate != null and endDate != ""'>
-        and str_to_date( images.create_time, '%Y-%m-%d %H:%i:%s') <![CDATA[<=]]> str_to_date(#{endDate}, '%Y-%m-%d %H:%i:%s') 
-    </if>
-  </sql>
 	
 	
 </mapper>
