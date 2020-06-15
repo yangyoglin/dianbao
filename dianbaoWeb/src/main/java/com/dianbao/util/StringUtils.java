@@ -111,6 +111,22 @@ public class StringUtils {
         }
         return true;
     }
+    
+    /**
+     * 判断字符串是否由数字所组成
+     *
+     * @param temp 要判断的字符串数据
+     * @return 如果字符串由数字组成返回true，否则返回false
+     */
+    public static boolean isNumber(String temp) {
+        char[] data = temp.toCharArray();         // 将字符串变为字符数组，可以取出每一位字符进行判断
+        for (int x = 0; x < data.length; x++) {   // 循环判断
+            if (data[x] > '9' || data[x] < '0') { // 不是数字字符范围
+                return false;                     // 后续不再判断
+            }
+        }
+        return true;                        // 如果全部验证通过返回true
+    }
 
     /**
      * Intelligently chops a String at a word boundary (whitespace) that occurs

@@ -30,9 +30,10 @@ public class UserController {
 
 	@RequestMapping("/")  
     public String getIndex(){    
-		ModelAndView mav = new ModelAndView("index"); 
-		User user = userService.selectUserById(9);
-	    mav.addObject("user", user); 
+		/*
+		 * ModelAndView mav = new ModelAndView("index"); User user =
+		 * userService.selectUserById(9); mav.addObject("user", user);
+		 */
         return "home";  
     }  
 

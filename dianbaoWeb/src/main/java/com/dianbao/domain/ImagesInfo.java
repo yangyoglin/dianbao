@@ -21,7 +21,7 @@ public class ImagesInfo extends BaseEntity {
 	/** 图片所属模块编号 */
 	private java.lang.String imagesModuleCode;
 	/** 图片所属模块名称 */
-	private java.lang.String imagesModule;
+	private java.lang.String imagesModuleName;
 	/** 图片状态 */
 	private java.lang.String imagesStatus;
 	/** 上传时间 */
@@ -68,12 +68,12 @@ public class ImagesInfo extends BaseEntity {
 	public java.lang.String getImagesModuleCode() {
 		return this.imagesModuleCode;
 	}
-	public void setImagesModule(java.lang.String value) {
-		this.imagesModule = value;
+	public void setImagesModuleName(java.lang.String value) {
+		this.imagesModuleName = value;
 	}
 	
-	public java.lang.String getImagesModule() {
-		return this.imagesModule;
+	public java.lang.String getImagesModuleName() {
+		return this.imagesModuleName;
 	}
 	public void setImagesStatus(java.lang.String value) {
 		this.imagesStatus = value;

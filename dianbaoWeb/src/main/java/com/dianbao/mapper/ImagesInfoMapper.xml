@@ -86,10 +86,10 @@
 	        images_status = #{imagesStatus,jdbcType=VARCHAR},
 	      </if>
 	      <if test="note != null">
-	        note = #{note,jdbcType=VARCHAR},
+	        note = #{note},
 	      </if>
 	      <if test="imagesSort != null">
-	        images_sort = #{imagesSort,jdbcType=VARCHAR},
+	        images_sort = #{imagesSort},
 	      </if>
         </set>
       
@@ -102,64 +102,61 @@
     insert into images_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="imagesName != null">
-        images_name
+        images_name,
       </if>
       <if test="imagesAdress != null">
-        images_adress
+        images_adress,
       </if>
       <if test="imagesUrl != null">
-        images_url
+        images_url,
       </if>
       <if test="imagesModuleCode != null">
-        images_module_code
+        images_module_code,
       </if>
       <if test="imagesModuleName != null">
-        images_module_name
+        images_module_name,
       </if>
       <if test="imagesStatus != null">
-        images_status
+        images_status,
       </if>
       <if test="createTime != null">
-        create_time
+        create_time,
       </if>
       <if test="note != null">
-        note
+        note,
       </if>
       <if test="imagesSort != null">
-        images_sort
+        images_sort,
       </if>
-      
-      )
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="imagesName != null">
-        #imagesName#
+        #{imagesName,jdbcType=VARCHAR},
       </if>
       <if test="imagesAdress != null">
-        #imagesAdress#
+        #{imagesAdress,jdbcType=VARCHAR},
       </if>
       <if test="imagesUrl != null">
-        #imagesUrl#
+        #{imagesUrl,jdbcType=VARCHAR},
       </if>
       <if test="imagesModuleCode != null">
-        #imagesModuleCode#
+        #{imagesModuleCode,jdbcType=VARCHAR},
       </if>
       <if test="imagesModuleName != null">
-        #imagesModuleName#
+        #{imagesModuleName,jdbcType=VARCHAR},
       </if>
       <if test="imagesStatus != null">
-        #imagesStatus#
+        #{imagesStatus,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null">
-        #createTime#
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="note != null">
-        #note#
+        #{note},
       </if>
       <if test="imagesSort != null">
-        #imagesSort#
+        #{imagesSort},
       </if>
-     )
     </trim>
   </insert>
 	

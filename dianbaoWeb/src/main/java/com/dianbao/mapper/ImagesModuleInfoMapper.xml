@@ -91,7 +91,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
   
   
 	
-	<select id="selectByPage" resultType="com.dianbao.domain.ImagesModuleInfo" parameterType="com.dianbao.domain.ImagesModuleInfo">
+	<select id="selectByPage" resultMap="BaseResultMap" parameterType="com.dianbao.domain.ImagesModuleInfo">
 	select 
     <include refid="Base_Column_List" />
     from images_module_info 

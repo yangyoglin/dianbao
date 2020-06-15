@@ -15,15 +15,75 @@
     <!-- 扫描controller（controller层注入） -->
    <context:component-scan base-package="com.dianbao.controller"/>  
      
-   <!-- 对模型视图添加前后缀 -->
-     <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver"
-      p:prefix="/WEB-INF/view/" p:suffix=".jsp"/>
+	<!-- 静态资源处理 css js imgs -->
+	<!-- <mvc:resources location="/resources/**" mapping="/resources" /> -->
+	
+	<mvc:resources location="/WEB-INF/view/img/" mapping="/img/**"/>   
+	<mvc:resources location="/view/js/" mapping="/js/**"/>    
+	<mvc:resources location="/WEB-INF/view/css/" mapping="/css/**"/>
+	<!--避免IE执行AJAX时，返回JSON出现下载文件 -->
+	<bean id="mappingJacksonHttpMessageConverter"
+		class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+		<property name="supportedMediaTypes">
+			<list>
+				<value>text/html;charset=UTF-8</value>
+			</list>
+		</property>
+	</bean>
+	<!-- 启动SpringMVC的注解功能，完成请求和注解POJO的映射 -->
+	<bean
+		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+				<ref bean="mappingJacksonHttpMessageConverter" /> <!-- JSON转换器 -->
+			</list>
+		</property>
+	</bean>
+
+	<!-- 配置文件上传，如果没有使用文件上传可以不用配置，当然如果不配，那么配置文件中也不必引入上传组件包 -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 默认编码 -->
+		<property name="defaultEncoding" value="utf-8" />
+		<!-- 文件大小最大值 -->
+		<property name="maxUploadSize" value="10485760000" />
+		<!-- 内存中的最大值 -->
+		<property name="maxInMemorySize" value="40960" />
+		<!-- 启用是为了推迟文件解析，以便捕获文件大小异常 -->
+		<property name="resolveLazily" value="true" />
+	</bean>
+
+	<!-- 配置视图解析器 -->
+	<bean
+		class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+		<property name="ignoreAcceptHeader" value="true" />
+		<property name="favorPathExtension" value="true" />
+		<property name="defaultContentType" value="text/html" />
+		<property name="favorParameter" value="true" />
+		<property name="mediaTypes">
+			<map>
+				<entry key="xml" value="application/xml" />
+				<entry key="json" value="text/plain" />
+				<entry key="xls" value="application/vnd.ms-excel" />
+			</map>
+		</property>
+	</bean>
+
+	<!-- 定义跳转的文件的前后缀 ，视图模式配置 -->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<!-- 这里的配置我的理解是自动给后面action的方法return的字符串加上前缀和后缀，变成一个 可用的url地址 -->
+		<property name="prefix" value="/WEB-INF/view/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+      <!-- 自动装配Json转换器 -->
+      <mvc:annotation-driven /> 
       
-      <!-- 接上步，所以要配置支持@RequestMapping注解的两个组件 -->
-     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"></bean>
-	 <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter"></bean>
+      <mvc:default-servlet-handler />
+      
+      <!-- 全局异常处理 -->
+      <bean id="exceptionHandler" class="com.dianbao.util.DefaultExceptionHandler" />
       
       
-      <!-- 检查静态资源的请求，交给默认的Servlet处理，但不支持@RequestMapping注解的组件 -->
-      <mvc:default-servlet-handler/>
+      
 </beans>

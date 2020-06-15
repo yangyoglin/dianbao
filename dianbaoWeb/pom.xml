@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.dianbao</groupId>
 	<artifactId>dianbaoWeb</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0</version>
 	<packaging>war</packaging>
 	<properties>
 		<!-- spring版本号 -->
@@ -16,7 +16,22 @@
 		<!-- mybatis版本号 -->
 		<mybatis.version>3.2.1</mybatis.version>
 	</properties>
- 
+	
+	<!-- maven打包 -->
+	<build>
+	<finalName>dianbaoWeb</finalName>
+		<plugins> 
+			<plugin> 
+				<groupId>org.apache.maven.plugins</groupId> 
+				<artifactId>maven-compiler-plugin</artifactId> 
+				<configuration> 
+					<source>1.8</source> 
+					<target>1.8</target> 
+				</configuration> 
+			</plugin> 
+		</plugins>
+	</build>
+	
 	<dependencies>
 		<!-- 添加Spring依赖 -->
 		<dependency>
@@ -179,7 +194,24 @@
             <artifactId>fastjson</artifactId>
             <version>1.2.47</version>
         </dependency>
+        
+		<!-- Json依赖架包下载 -->
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.7</version>
+        </dependency>
+        
+        <dependency>
+	        <groupId>org.projectlombok</groupId>
+	        <artifactId>lombok</artifactId>
+	        <version>1.16.10</version>
+	        <scope>provided</scope>
+	    </dependency>
 
 	</dependencies>
+	
+	
  
 </project>
