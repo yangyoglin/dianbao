@@ -26,7 +26,7 @@ public class ImagesInfo extends BaseEntity {
 	private java.lang.String imagesStatus;
 	/** 上传时间 */
 	private java.util.Date createTime;
-	/** 备注 */
+	/** 备注/详情 */
 	private java.lang.String note;
 	/** 图片排序 */
 	private java.lang.Integer imagesSort;

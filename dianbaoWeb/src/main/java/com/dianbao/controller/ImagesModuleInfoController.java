@@ -35,6 +35,7 @@ public class ImagesModuleInfoController {
 	 * @return
 	 */
 		  @RequestMapping("/findByList")
+		  @ResponseBody
 		  public Map<String, Object> findByList(@RequestBody(required = false) ImagesModuleInfo param){
 			  if(param == null) {
 					param = new ImagesModuleInfo();

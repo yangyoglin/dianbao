@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,7 +43,8 @@ public class ImagesInfoController {
 	@ResponseBody
 	public Map<String, Object> upload(@RequestParam("imagesName") String imagesName,
 			@RequestParam("imagesModuleCode") String imagesModuleCode, @RequestParam("imagesSort") String imagesSort,
-			@RequestParam("imagesModuleName") String imagesModuleName, MultipartFile file, HttpServletRequest request)
+			@RequestParam("imagesModuleName") String imagesModuleName,@RequestParam("note") String note,
+			MultipartFile file, HttpServletRequest request)
 			throws Exception {
 
 		if (file == null) {
@@ -57,9 +59,16 @@ public class ImagesInfoController {
 		}
 		param.setImagesStatus("1");
 		checkParam(param);
-		param = imagesInfoService.copyImages(param, file);
+		if(file != null && file.getSize()>0) {
+			checkImages(file);
+			param = imagesInfoService.copyImages(param, file);
+		}
 		param.setCreateTime(new Date());
 
+		if(StringUtils.isNotEmpty(note)) {
+			param.setNote(note);
+		}
+		
 		imagesInfoService.insertSelective(param);
 
 		return CommonUtils.result(1, "上传成功");
@@ -77,6 +86,17 @@ public class ImagesInfoController {
 		if (StringUtils.isBlank(param.getImagesModuleName())) {
 			throw new CommException("文件所属模块名称不能为空!");
 		}
+	}
+	
+	private void checkImages(MultipartFile file) {
+		String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+        suffix = suffix.toLowerCase();
+        if(suffix.equals(".jpg") || suffix.equals(".jpeg") || suffix.equals(".png") || suffix.equals(".gif")){
+        	
+        }else {
+			throw new CommException(CommErrors.IMAGES_ERROR);
+        }
+		
 	}
 
 	
@@ -164,6 +184,7 @@ public class ImagesInfoController {
 		     * @param param
 		     * @return
 		     */
+		  
 		    @RequestMapping(value = "/selectByPage")
 		    @ResponseBody
 		    public Map<String, Object> selectByPage(@RequestBody(required = false) ImagesInfo param){

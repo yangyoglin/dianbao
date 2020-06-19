@@ -24,6 +24,7 @@ public enum CommErrors {
     MISSING_PARAM(80000, "缺少参数"),
     //monitor接口异常
     MON_ERROR(30001, "参数错误"),
+    IMAGES_ERROR(30003, "请上传jpg、jpeg、png、gif类型图片"),
 
     ;
 

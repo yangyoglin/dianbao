@@ -18,6 +18,8 @@ public class ImagesInfoServiceImpl implements ImagesInfoService {
 
 	@Value("${images.address}")
 	private String imagesAddress;
+	@Value("${images.url}")
+	private String imagesUrl;
 	
 	@Autowired
 	private ImagesInfoDao imagesInfoDao;
@@ -77,7 +79,7 @@ public class ImagesInfoServiceImpl implements ImagesInfoService {
 		String fileAddress = imagesAddress +"/"+moduleCode + filename;
 		file.transferTo(new File(fileAddress));// 保存图片
 		param.setImagesAdress(fileAddress);
-		param.setImagesUrl("/images/"+moduleCode + filename);
+		param.setImagesUrl(imagesUrl+moduleCode + filename);
 		return param;
 	}
 
@@ -86,19 +88,6 @@ public class ImagesInfoServiceImpl implements ImagesInfoService {
 		// TODO Auto-generated method stub
 		return imagesInfoDao.selectImagesByPage(param);
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	
