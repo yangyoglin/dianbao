@@ -160,7 +160,7 @@
     </trim>
   </insert>
 	
-	<select id="selectImagesByPage" resultType="com.dianbao.domain.ImagesInfo" parameterType="com.dianbao.domain.ImagesInfo">
+	<select id="selectImagesByPage" resultMap="BaseResultMap" parameterType="com.dianbao.domain.ImagesInfo">
 	select images.id, images.images_name, images.images_adress, images.images_url, images.images_module_code,  
     images.images_module_name, images.images_status,DATE_FORMAT(images.create_time,'%Y-%m-%d %H:%i:%s') createTimeZ, images.note, images.images_sort from images_info images 
     where 1=1 <include refid="list_Filters_images" />

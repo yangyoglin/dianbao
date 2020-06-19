@@ -75,11 +75,12 @@ public class ImagesInfoServiceImpl implements ImagesInfoService {
 		String contentType = file.getContentType(); // 获取文件类型（后缀）
 		// 因为获取的后缀是XXXX/xxx形式
 		contentType = contentType.substring(contentType.indexOf("/") + 1);
-		filename = imagesName + "." + contentType;
+		long stime = System.currentTimeMillis();//时间戳为文件名
+		filename = stime + "." + contentType;
 		String fileAddress = imagesAddress +"/"+moduleCode + filename;
 		file.transferTo(new File(fileAddress));// 保存图片
 		param.setImagesAdress(fileAddress);
-		param.setImagesUrl(imagesUrl+moduleCode + filename);
+		param.setImagesUrl(imagesUrl+"/"+moduleCode + filename);
 		return param;
 	}
 
