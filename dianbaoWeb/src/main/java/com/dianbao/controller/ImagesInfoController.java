@@ -223,7 +223,7 @@ public class ImagesInfoController {
 				return returnMap;
 		    }
 		    
-		    
+		   
 		    
 		    
 		    
