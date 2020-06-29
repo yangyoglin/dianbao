@@ -4,6 +4,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +17,7 @@ import com.dianbao.service.UserService;
 import com.dianbao.util.CommErrors;
 import com.dianbao.util.CommException;
 import com.dianbao.util.CommonUtils;
+import com.dianbao.util.DefaultExceptionHandler;
 
 /**
  * @author YangYongLin
@@ -24,6 +26,7 @@ import com.dianbao.util.CommonUtils;
  */
 @Controller
 public class LoginController {
+	private static Logger log = Logger.getLogger(LoginController.class);
 
 	@Autowired
 	private UserService userService;
@@ -44,6 +47,7 @@ public class LoginController {
 			throw new CommException(CommErrors.LOGIN_ISNO);
         }
 
+        log.info(usertel + "登录成功");
         //将用户对象添加到Session中
         session.setAttribute("USER_SESSION",user);
         return CommonUtils.result(1, "登录成功");
