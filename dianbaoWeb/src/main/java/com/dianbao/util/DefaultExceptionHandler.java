@@ -47,7 +47,7 @@ public class DefaultExceptionHandler implements HandlerExceptionResolver {
 	        attributes.put("message", ex.getMessage());
 	        view.setAttributesMap(attributes);
 	        mv.setView(view); 
-	        log.debug("异常:" + ex.getMessage(), ex);
+	        log.debug("异常:" + ex.getMessage());
 	        return mv;
     }
     

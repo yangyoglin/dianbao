@@ -8,6 +8,7 @@ package com.dianbao.domain;
  */
 public class User {
 	private Integer userId;
+	private String userTel;
 	private String userName;
 	private String userPassword;
 	private String userEmail;
@@ -44,9 +45,17 @@ public class User {
 		this.userEmail = userEmail;
 	}
  
+	public String getUserTel() {
+		return userTel;
+	}
+
+	public void setUserTel(String userTel) {
+		this.userTel = userTel;
+	}
+
 	@Override
 	public String toString() {
-		return "User [userId=" + userId + ", userName=" + userName
+		return "User [userId=" + userId + ", userTel=" + userTel+ ", userName=" + userName
 				+ ", userPassword=" + userPassword + ", userEmail=" + userEmail
 				+ "]";
 	}

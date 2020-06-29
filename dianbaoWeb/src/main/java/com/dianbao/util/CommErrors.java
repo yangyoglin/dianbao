@@ -13,6 +13,8 @@ public enum CommErrors {
     API_ERROR(-1, "系统繁忙，请稍后重试"),
     API_NOT_EXIST(10001, "请求接口(%s)不存在"),
     LOGIN_AUTH_FAIR(401, "登录已过期"),
+    LOGIN_ISNO(402,"没有该账号"),
+    LOGIN_ISPWD(403,"密码错误"),
     
     WX_USER_NOT_PERM(103, "帐号没有权限访问"),
     

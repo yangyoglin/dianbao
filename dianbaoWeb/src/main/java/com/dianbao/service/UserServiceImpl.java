@@ -22,4 +22,9 @@ public class UserServiceImpl implements UserService {
 		return userDao.selectUserById(userId);
 	}
 
+	public User selectUserByTel(String userTel) {
+		// TODO Auto-generated method stub
+		return userDao.selectUserByTel(userTel);
+	}
+
 }
