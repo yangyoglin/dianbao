@@ -18,6 +18,7 @@ import com.dianbao.util.CommErrors;
 import com.dianbao.util.CommException;
 import com.dianbao.util.CommonUtils;
 import com.dianbao.util.DefaultExceptionHandler;
+import com.dianbao.util.MD5Util;
 
 /**
  * @author YangYongLin
@@ -37,10 +38,11 @@ public class LoginController {
         //获取用户名和密码
         String usertel=user.getUserTel();
         String password=user.getUserPassword();
+        String md5pwd = MD5Util.md5password(password);
         
         User vo = userService.selectUserByTel(usertel);
         if(vo!=null) {
-        	if(!vo.getUserPassword().equals(password)) {
+        	if(!vo.getUserPassword().equals(md5pwd)) {
     			throw new CommException(CommErrors.LOGIN_ISPWD);
         	}
         }else {

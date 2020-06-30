@@ -197,6 +197,8 @@ public class ImagesInfoController {
 		    	returnMap.put("imagesName", param.getImagesName());
 		    	returnMap.put("imagesModuleCode", param.getImagesModuleCode());
 		    	returnMap.put("imagesModuleName", param.getImagesModuleName());
+		    	returnMap.put("pageNo", param.getPageNo());
+		    	returnMap.put("pageSize", param.getPageSize());
 		    	returnMap.put("beginDate", param.getBeginDate());
 		    	returnMap.put("endDate", param.getEndDate());
 		    	returnMap.put("page", page);

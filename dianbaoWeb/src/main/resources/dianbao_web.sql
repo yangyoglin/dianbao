@@ -15,7 +15,7 @@ create table images_info
    images_module_name   varchar(64) comment '图片所属模块名称',
    images_status        varchar(1) comment '图片状态',
    create_time          datetime comment '上传时间',
-   note                 varchar(256) comment '备注',
+   note                 varchar(256) comment '备注/详情',
    images_sort          int(10) comment '图片排序',
    primary key (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT comment '负责官网图片分类管理';
@@ -35,17 +35,6 @@ create table images_module_info
    module_parent_name   varchar(64) comment '模块上级名称',
    primary key (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT comment '图片所属模块管理';
-
-
-
-drop table if exists user;
-CREATE TABLE `user` (
-  `USER_ID` int(20) NOT NULL AUTO_INCREMENT,
-  `USER_NAME` varchar(255) DEFAULT NULL COMMENT '用户账户',
-  `USER_PASSWORD` varchar(255) DEFAULT NULL COMMENT '密码',
-  `USER_EMAIL` varchar(255) DEFAULT NULL COMMENT '邮箱',
-  PRIMARY KEY (`USER_ID`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 
 
@@ -79,4 +68,22 @@ insert into images_module_info(module_code,module_name,module_parent_code,module
 insert into images_module_info(module_code,module_name,module_parent_code,module_parent_name) VALUES('005002','二维码-苹果APP','005','二维码');
 insert into images_module_info(module_code,module_name,module_parent_code,module_parent_name) VALUES('005003','二维码-服务号','005','二维码');
 insert into images_module_info(module_code,module_name,module_parent_code,module_parent_name) VALUES('005004','二维码-订阅号','005','二维码');
+
+
+
+drop table if exists user;
+CREATE TABLE `user` (
+  `USER_ID` int(20) NOT NULL AUTO_INCREMENT,
+  `USER_TEL` varchar(64) DEFAULT NULL COMMENT '用户账户',
+  `USER_NAME` varchar(255) DEFAULT NULL COMMENT '用户名称',
+  `USER_PASSWORD` varchar(255) DEFAULT NULL COMMENT '密码',
+  `USER_EMAIL` varchar(255) DEFAULT NULL COMMENT '邮箱',
+  PRIMARY KEY (`USER_ID`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+
+
+insert into user(USER_TEL,USER_NAME,USER_PASSWORD) VALUES('yangyonglin','杨拥林','D9F6E636E369552839E7BB8057AEB8DA');
+insert into user(USER_TEL,USER_NAME,USER_PASSWORD) VALUES('chenweiying','陈伟迎','D9F6E636E369552839E7BB8057AEB8DA');
+insert into user(USER_TEL,USER_NAME,USER_PASSWORD) VALUES('wangying','王盈','D9F6E636E369552839E7BB8057AEB8DA');
+insert into user(USER_TEL,USER_NAME,USER_PASSWORD) VALUES('guozuncheng','郭尊诚','D9F6E636E369552839E7BB8057AEB8DA');
 
