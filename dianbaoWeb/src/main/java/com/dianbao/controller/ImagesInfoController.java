@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.dianbao.common.Authorization;
 import com.dianbao.domain.ImagesInfo;
 import com.dianbao.service.ImagesInfoService;
 import com.dianbao.util.CommErrors;
@@ -184,7 +185,7 @@ public class ImagesInfoController {
 		     * @param param
 		     * @return
 		     */
-		  
+		  	//@Authorization
 		    @RequestMapping(value = "/selectByPage")
 		    @ResponseBody
 		    public Map<String, Object> selectByPage(@RequestBody(required = false) ImagesInfo param){

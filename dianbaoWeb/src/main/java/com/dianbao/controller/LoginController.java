@@ -1,23 +1,24 @@
 package com.dianbao.controller;
 
+import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dianbao.domain.User;
+import com.dianbao.service.TokenService;
 import com.dianbao.service.UserService;
 import com.dianbao.util.CommErrors;
 import com.dianbao.util.CommException;
 import com.dianbao.util.CommonUtils;
-import com.dianbao.util.DefaultExceptionHandler;
 import com.dianbao.util.MD5Util;
 
 /**
@@ -32,9 +33,13 @@ public class LoginController {
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private TokenService tokenService;
+	
 	@RequestMapping(value = "/login")
 	@ResponseBody
-    public Map<String, Object> login(@RequestBody User user, HttpSession session){
+    public Map<String, Object> login(@RequestBody User user, HttpServletRequest request){
+		Map<String,Object> returnMap = new HashMap<>();
         //获取用户名和密码
         String usertel=user.getUserTel();
         String password=user.getUserPassword();
@@ -48,11 +53,24 @@ public class LoginController {
         }else {
 			throw new CommException(CommErrors.LOGIN_ISNO);
         }
-
+        
+        String token = "";
+        try {
+        	//创建Token
+            String userAgent=request.getHeader("user-agent");
+            token = tokenService.generateToken(userAgent,vo);
+            tokenService.save(token,vo);
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			throw new CommException(CommErrors.API_ERROR);
+		}
+        
         log.info(usertel + "登录成功");
-        //将用户对象添加到Session中
-        session.setAttribute("USER_SESSION",user);
-        return CommonUtils.result(1, "登录成功");
+        returnMap.put("token", token);
+        returnMap.put("code", "1");
+        returnMap.put("message", "登录成功");
+        return returnMap;
     }
 
 

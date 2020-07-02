@@ -85,5 +85,16 @@
       <!-- 全局异常处理 -->
       <bean id="exceptionHandler" class="com.dianbao.util.DefaultExceptionHandler" />
       
+      <mvc:interceptors>
+          <mvc:interceptor>
+            <!--           要拦截的具体方法  /**全拦截-->
+            <mvc:mapping path="/**"/>
+            <!--            配置拦截器对象-->
+            <bean id="tokenInterceptor" class="com.dianbao.util.NoRetryInterceptor"></bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+      
+      
+      
       
 </beans>

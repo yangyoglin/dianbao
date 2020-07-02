@@ -15,6 +15,7 @@ public enum CommErrors {
     LOGIN_AUTH_FAIR(401, "登录已过期"),
     LOGIN_ISNO(402,"没有该账号"),
     LOGIN_ISPWD(403,"密码错误"),
+    LOGIN_NOLOGIN(404,"未登录"),
     
     WX_USER_NOT_PERM(103, "帐号没有权限访问"),
     
@@ -33,9 +34,9 @@ public enum CommErrors {
     private int errorCode;
     private String errorMsg;
 
-    CommErrors(int code, String message) {
-        this.errorCode = code;
-        this.errorMsg = message;
+    CommErrors(int errorCode, String errorMsg) {
+        this.errorCode = errorCode;
+        this.errorMsg = errorMsg;
     }
 
     public int getErrorCode() {

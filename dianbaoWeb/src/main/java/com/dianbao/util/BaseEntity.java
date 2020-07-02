@@ -70,7 +70,7 @@ public abstract class BaseEntity implements Serializable {
      * @param pageSize the pageSize to set
      */
     public void setPageSize(int pageSize) {
-        this.pageSize = pageSize < 0 ? 10 : pageSize;
+        this.pageSize = pageSize < 1 ? 10 : pageSize;
     }
 
     /**
