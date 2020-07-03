@@ -1,5 +1,6 @@
 package com.dianbao.domain;
 
+import java.util.Date;
 
 /**
  * Token实体
@@ -11,10 +12,10 @@ public class Dto {
     private String token;
  
     //token创建时间
-    private Long tokenCreatedTime;
+    private String tokenCreatedTime;
  
     //失效时间
-    private Long tokenExpiryTime;
+    private String tokenExpiryTime;
  
     private String isLogin;
  
@@ -25,24 +26,24 @@ public class Dto {
     public void setToken(String token) {
         this.token = token;
     }
- 
-    public Long getTokenCreatedTime() {
-        return tokenCreatedTime;
-    }
- 
-    public void setTokenCreatedTime(Long tokenCreatedTime) {
-        this.tokenCreatedTime = tokenCreatedTime;
-    }
- 
-    public Long getTokenExpiryTime() {
-        return tokenExpiryTime;
-    }
- 
-    public void setTokenExpiryTime(Long tokenExpiryTime) {
-        this.tokenExpiryTime = tokenExpiryTime;
-    }
- 
-    public String getIsLogin() {
+
+	public String getTokenCreatedTime() {
+		return tokenCreatedTime;
+	}
+
+	public void setTokenCreatedTime(String tokenCreatedTime) {
+		this.tokenCreatedTime = tokenCreatedTime;
+	}
+
+	public String getTokenExpiryTime() {
+		return tokenExpiryTime;
+	}
+
+	public void setTokenExpiryTime(String tokenExpiryTime) {
+		this.tokenExpiryTime = tokenExpiryTime;
+	}
+
+	public String getIsLogin() {
         return isLogin;
     }
  

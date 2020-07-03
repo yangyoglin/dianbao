@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -17,6 +18,7 @@ import com.dianbao.controller.LoginController;
 public class NoRetryInterceptor implements HandlerInterceptor {
 	private static Logger log = Logger.getLogger(NoRetryInterceptor.class);
 
+	@Autowired
 	private RedisAPI redisAPI;
 	
 	@Override
@@ -44,6 +46,11 @@ public class NoRetryInterceptor implements HandlerInterceptor {
 				}else {
 					if(redisAPI.exists(token)) {
 						log.info("token验证通过");
+						
+						//刷新过期时间，先判断剩余过期时间是否大于-1(永久生存或者不存在的都是-1)
+						if(redisAPI.ttl(token)>0) {
+							redisAPI.expire(token, 2 * 60 * 60);
+						}
 						return true;
 					}else {
 						log.info("token不一致，返回登录已过期");

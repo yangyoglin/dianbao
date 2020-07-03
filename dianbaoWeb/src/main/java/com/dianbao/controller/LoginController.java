@@ -1,5 +1,7 @@
 package com.dianbao.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,12 +15,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.dianbao.domain.Dto;
 import com.dianbao.domain.User;
 import com.dianbao.service.TokenService;
 import com.dianbao.service.UserService;
 import com.dianbao.util.CommErrors;
 import com.dianbao.util.CommException;
-import com.dianbao.util.CommonUtils;
 import com.dianbao.util.MD5Util;
 
 /**
@@ -39,6 +41,7 @@ public class LoginController {
 	@RequestMapping(value = "/login")
 	@ResponseBody
     public Map<String, Object> login(@RequestBody User user, HttpServletRequest request){
+		Dto dto = new Dto();
 		Map<String,Object> returnMap = new HashMap<>();
         //获取用户名和密码
         String usertel=user.getUserTel();
@@ -56,11 +59,20 @@ public class LoginController {
         
         String token = "";
         try {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         	//创建Token
             String userAgent=request.getHeader("user-agent");
             token = tokenService.generateToken(userAgent,vo);
             tokenService.save(token,vo);
 			
+			/*
+			 * dto.setIsLogin("true"); dto.setToken(token);
+			 * dto.setTokenCreatedTime(format.format(new Date()));
+			 * 
+			 * long currentTime = System.currentTimeMillis() ; currentTime +=120*60*1000;
+			 * Date date=new Date(currentTime); format.format(date);
+			 * dto.setTokenExpiryTime(format.format(date));
+			 */
 		} catch (Exception e) {
 			// TODO: handle exception
 			throw new CommException(CommErrors.API_ERROR);

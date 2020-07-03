@@ -55,7 +55,8 @@ public class RedisAPI {
     public String get(String key){
         Jedis jedis=jedisPool.getResource();
         String value= jedis.get(key);
-        jedisPool.returnResource(jedis);
+        //jedisPool.returnResource(jedis);
+        jedis.close();
         return value;
     }
 
@@ -68,7 +69,8 @@ public class RedisAPI {
     public String set(String key,String value){
         Jedis jedis=jedisPool.getResource();
         String result= jedis.set(key, value);
-        jedisPool.returnResource(jedis);
+        //jedisPool.returnResource(jedis);
+        jedis.close();
         return result;
     }
 
@@ -76,13 +78,14 @@ public class RedisAPI {
      * @Title: 添加,带超时时间
      * @author YYL 2020年7月2日 上午9:47:10
      * @param key
-     * @param seconds
+     * @param seconds     单位 秒, 2 * 60 * 60 = 2小时
      * @param value
      */
     public String set(String key,int seconds,String value){
         Jedis jedis=jedisPool.getResource();
         String result=jedis.setex(key, seconds, value);
-        jedisPool.returnResource(jedis);
+        //jedisPool.returnResource(jedis);
+        jedis.close();
         return value;
     }
 
@@ -94,7 +97,8 @@ public class RedisAPI {
     public boolean exists(String key){
         Jedis jedis=jedisPool.getResource();
         boolean result=jedis.exists(key);
-        jedisPool.returnResource(jedis);
+        //jedisPool.returnResource(jedis);
+        jedis.close();
         return result;
     }
 
@@ -106,7 +110,8 @@ public class RedisAPI {
     public Long ttl(String key){
         Jedis jedis=jedisPool.getResource();
         Long result=jedis.ttl(key);
-        jedisPool.returnResource(jedis);
+        //jedisPool.returnResource(jedis);
+        jedis.close();
         return result;
 
     }
@@ -119,9 +124,23 @@ public class RedisAPI {
     public Long dell(String key){
         Jedis jedis=jedisPool.getResource();
         Long result=jedis.del(key);
-        jedisPool.returnResource(jedis);
+        //jedisPool.returnResource(jedis);
+        jedis.close();
         return result;
 
+    }
+    
+    /**
+     * @Title: 根据KEY更新过期时间
+     * @author YYL 2020年7月3日 上午9:19:37
+     * @param key
+     * @param seconds     单位 秒, 2 * 60 * 60 = 2小时
+     */
+    public void expire(String key,int seconds) {
+        Jedis jedis=jedisPool.getResource();
+    	jedis.expire(key, seconds);
+        //jedisPool.returnResource(jedis);
+        jedis.close();
     }
 }
 
